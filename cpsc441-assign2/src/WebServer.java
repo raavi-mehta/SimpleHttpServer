@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class WebServer extends Thread {
 	
@@ -17,7 +18,7 @@ public class WebServer extends Thread {
 	private Scanner inputStream;
     private PrintWriter outputStream;
     private ServerSocket serverSocket;
-    private List<WebServerWorker> clientThreads = new ArrayList<>();
+    private ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private volatile boolean shutdown = false;
 	
 	public WebServer(int port) {
@@ -30,7 +31,7 @@ public class WebServer extends Thread {
 			serverSocket = new ServerSocket(port);
 			serverSocket.setSoTimeout(1000);
 		} catch (IOException e) {
-			System.err.println("I/O error when creating server socket, exiting ...");
+			System.out.println("I/O error when creating server socket:\n" + e.getMessage() + "\nExiting ...");
 			System.exit(1);
 		}
 		
@@ -43,34 +44,46 @@ public class WebServer extends Thread {
 				clientSocket = serverSocket.accept();
 				System.out.println("Accepted request for connection.");
 				
-			} catch (IOException e) {
-				System.err.println("I/O error while waiting for connection, please try again.");
-			}
-			
-			try {
-				
 				inputStream = new Scanner(new InputStreamReader(clientSocket.getInputStream()));
 				outputStream = new PrintWriter(new DataOutputStream(clientSocket.getOutputStream()));
 				
 				System.out.println("Established connection.\n");
-				// TODO handle executor
-				ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-				WebServerWorker client = new WebServerWorker(clientSocket, inputStream, outputStream);
-				clientThreads.add(client);
-				client.start();
+				executor.execute(new WebServerWorker(clientSocket, inputStream, outputStream));
 				
 			} catch (SocketTimeoutException e) {
-				// TODO handle this exception
+				// TODO handle if needed
+				
 			} catch (IOException e) {
-				System.err.println("Error establishing connection, please try again.");
+				System.out.println("I/O error while waiting for connection:\n" + e.getMessage());
 			}
 			
 		}
+		cleanup();
 		
 	}
 	
 	public void shutdown() {
+		this.shutdown = true;
+	}
+	
+	private void cleanup() {
+		try {
+			inputStream.close();
+			outputStream.close();
+			serverSocket.close();
+		} catch (IOException e) {
+			System.out.println("Error shutting down server:\n" + e.getMessage());
+		}
 		
+		try {
+			executor.shutdown();
+			
+			 if (!executor.awaitTermination(5, TimeUnit.SECONDS)) { 
+				 executor.shutdownNow();
+			 }
+		} catch (InterruptedException e) {
+			executor.shutdownNow();
+		}
 	}
 
 }

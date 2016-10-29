@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,12 +33,12 @@ public class WebServer extends Thread {
 			System.exit(1);
 		}
 		
+		System.out.println("\nWaiting for connection requests ...");
 		while(!shutdown) {
 			
 			Socket clientSocket = null;
 			try {
 				
-				System.out.println("\nWaiting for connection request ...");
 				clientSocket = serverSocket.accept();
 				System.out.println("Accepted request for connection.");
 				
@@ -54,7 +52,7 @@ public class WebServer extends Thread {
 				// TODO handle if needed
 				
 			} catch (IOException e) {
-				System.out.println("I/O error while waiting for connection:\n" + e.getMessage());
+				System.out.println("I/O error while creating connection:\n" + e.getMessage());
 			}
 			
 		}
@@ -67,14 +65,8 @@ public class WebServer extends Thread {
 	}
 	
 	private void cleanup() {
-		try {
-			inputStream.close();
-			outputStream.close();
-			serverSocket.close();
-		} catch (IOException e) {
-			System.out.println("Error shutting down server:\n" + e.getMessage());
-		}
 		
+		// terminate all threads
 		try {
 			executor.shutdown();
 			
@@ -83,6 +75,15 @@ public class WebServer extends Thread {
 			 }
 		} catch (InterruptedException e) {
 			executor.shutdownNow();
+		}
+		
+		// release resources
+		try {
+			inputStream.close();
+			outputStream.close();
+			serverSocket.close();
+		} catch (IOException e) {
+			System.out.println("Error shutting down server:\n" + e.getMessage());
 		}
 	}
 

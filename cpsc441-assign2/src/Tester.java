@@ -7,10 +7,10 @@ import java.util.Scanner;
  * @version	4.0, Oct 19, 2016
  *
  */
-public class Tester {
+public class Tester implements Constants {
 	
 	public static void main(String[] args) {
-		int serverPort = 2225;
+		int serverPort = PORT;
 
 		// parse command line args
 		if (args.length == 1) {

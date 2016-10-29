@@ -16,5 +16,21 @@ public class WebServerWorker extends Thread {
 	
 	public void run() {
 		
+		String s;
+		while(true) {
+			
+			s = inputStream.nextLine();
+			
+			// exit if message from client is "bye"
+			if(s.equalsIgnoreCase("bye")) {
+				outputStream.println("bye");
+				outputStream.flush();
+				break;
+			}
+			
+			outputStream.println(s);
+			outputStream.flush();
+			
+        }
 	}
 }

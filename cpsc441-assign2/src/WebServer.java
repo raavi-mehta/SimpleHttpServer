@@ -33,7 +33,7 @@ public class WebServer extends Thread {
 			System.exit(1);
 		}
 		
-		System.out.println("\nWaiting for connection requests ...");
+		System.out.println("\nWaiting for connection requests ...\n");
 		while(!shutdown) {
 			
 			Socket clientSocket = null;

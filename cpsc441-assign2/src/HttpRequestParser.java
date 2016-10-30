@@ -46,6 +46,19 @@ public class HttpRequestParser {
 		return requestHeaders.get(header);
 	}
 	
+	public String getUrlPath() throws HttpRequestParserException, IOException {
+		if (requestLine == null || requestLine.isEmpty())
+			throw new HttpRequestParserException("Url null or empty\n");
+		
+		BufferedReader br = new BufferedReader(new StringReader(requestLine));
+		String[] line = br.readLine().split(" ");
+		
+		if (!(line.length >= 3) || !line[0].equals("GET"))
+			throw new HttpRequestParserException("Improper request line format\n");
+		
+		return line[1];
+	}
+	
 	public String toString() {
 		String st = requestLine + System.lineSeparator();
 		for (Map.Entry<String, String> entry : requestHeaders.entrySet())

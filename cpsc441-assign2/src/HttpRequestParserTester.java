@@ -24,6 +24,7 @@ public class HttpRequestParserTester {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Request was ...\n\n" + parser.toString());
+		System.out.println(parser.toString());
+		System.out.println(parser.getHeaderParameter("Connection"));
 	}
 }

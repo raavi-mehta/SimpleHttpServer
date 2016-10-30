@@ -33,7 +33,7 @@ public class WebServer extends Thread {
 			Socket clientSocket = null;
 			try {
 				clientSocket = serverSocket.accept();
-				System.out.println("Accepted request for connection.");
+				System.out.println("\nAccepted request for connection.");
 				executor.execute(new WebServerWorker(clientSocket));
 			} catch (SocketTimeoutException e) {
 				// TODO handle if needed

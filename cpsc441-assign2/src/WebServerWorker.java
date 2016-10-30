@@ -28,6 +28,7 @@ public class WebServerWorker extends Thread {
 			createBadRequest();
 			cleanup();
 		} catch (Exception e) {
+			System.out.println("Could not process request");
 			e.getStackTrace();
 		}
 		
@@ -41,7 +42,7 @@ public class WebServerWorker extends Thread {
 		
 		line = inputStream.readLine();
 		while(line != null && !line.isEmpty()) {
-			sb.append(line);
+			sb.append(line + "\r\n");
 			line = inputStream.readLine();
 		}
 		
@@ -85,6 +86,7 @@ public class WebServerWorker extends Thread {
 		try {
 			outputStream.write(response.getBytes("US-ASCII"));
 		} catch (Exception e) {
+			System.out.println("Could not write response to socket:");
 			e.printStackTrace();
 		}
 	}

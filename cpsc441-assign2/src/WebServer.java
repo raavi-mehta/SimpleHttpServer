@@ -1,11 +1,7 @@
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 public class WebServer extends Thread {
 	
 	private int port;
-	private Scanner inputStream;
-    private PrintWriter outputStream;
     private ServerSocket serverSocket;
     private ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private volatile boolean shutdown = false;
@@ -38,16 +32,9 @@ public class WebServer extends Thread {
 			
 			Socket clientSocket = null;
 			try {
-				
 				clientSocket = serverSocket.accept();
 				System.out.println("Accepted request for connection.");
-				
-				inputStream = new Scanner(new InputStreamReader(clientSocket.getInputStream()));
-				outputStream = new PrintWriter(new DataOutputStream(clientSocket.getOutputStream()));
-				
-				System.out.println("Established connection.\n");
-				executor.execute(new WebServerWorker(clientSocket, inputStream, outputStream));
-				
+				executor.execute(new WebServerWorker(clientSocket));
 			} catch (SocketTimeoutException e) {
 				// TODO handle if needed
 				
@@ -79,8 +66,6 @@ public class WebServer extends Thread {
 		
 		// release resources
 		try {
-			inputStream.close();
-			outputStream.close();
 			serverSocket.close();
 		} catch (IOException e) {
 			System.out.println("Error shutting down server:\n" + e.getMessage());

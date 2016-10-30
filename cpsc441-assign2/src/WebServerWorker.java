@@ -1,25 +1,33 @@
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class WebServerWorker extends Thread {
 	
 	Socket clientSocket;
-	Scanner inputStream;
+	BufferedReader inputStream;
 	PrintWriter outputStream;
 
-	public WebServerWorker(Socket clientSocket, Scanner inputStream, PrintWriter outputStream) {
+	public WebServerWorker(Socket clientSocket) throws IOException {
 		this.clientSocket = clientSocket;
-		this.inputStream = inputStream;
-		this.outputStream = outputStream;
+		this.inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		this.outputStream = new PrintWriter(new DataOutputStream(clientSocket.getOutputStream()));
 	}
 	
 	public void run() {
 		
-		String s;
+		String s = null;
 		while(true) {
 			
-			s = inputStream.nextLine();
+			try {
+				s = inputStream.readLine();
+			} catch (IOException e) {
+				outputStream.println("Could not read line");
+				break;
+			}
 			
 			// exit if message from client is "bye"
 			if(s.equalsIgnoreCase("bye")) {
@@ -32,5 +40,14 @@ public class WebServerWorker extends Thread {
 			outputStream.flush();
 			
         }
+		
+		try {
+			inputStream.close();
+			outputStream.close();
+			clientSocket.close();
+		} catch (IOException e) {
+			System.out.println("Error closing client connection");
+		}
+		
 	}
 }

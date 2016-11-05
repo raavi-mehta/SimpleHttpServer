@@ -1,7 +1,7 @@
 # SimpleHttpServer
 This is a very simple multithreaded HTTP server that supports non-persistent
-HTTP GET requests for serving files to clients. This server is capable of
-responding with the following status codes:
+HTTP GET requests for simultaneously serving files to multiple clients. This
+server is capable of responding with the following status codes:
 - 200 OK            (The file exists on the server)
 - 404 Not Found     (The file requested was not found on the server)
 - 400 Bad Request   (The request was malformed)

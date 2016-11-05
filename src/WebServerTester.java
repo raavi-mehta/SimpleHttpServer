@@ -1,13 +1,6 @@
 import java.util.Scanner;
 
-/**
- * A simple test driver
- * 
- * @author 	Majid Ghaderi
- * @version	4.0, Oct 19, 2016
- *
- */
-public class Tester implements Constants {
+public class WebServerTester implements Constants {
 	
 	public static void main(String[] args) {
 		int serverPort = PORT;

@@ -28,8 +28,8 @@ files by typing into your address bar:
 
 `localhost:2225/test_directory/testfile`
 
-where "2225" is the port number the server is running on, and /testfile is the
-path to the file.
+where "2225" is the port number the server is running on, and 
+"/test_directory/testfile" is the path to the file.
 
 Here, the "root" directory for your server is considered the location from where
 the server is running. For example, if your server is in the directory

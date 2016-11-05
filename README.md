@@ -26,7 +26,7 @@ Once the server is running, you may use a browser to download files from your
 server. For example, if you are accessing the server locally, you may download
 files by typing into your address bar:
 
-`localhost:2225/testfile`
+`localhost:2225/test_directory/testfile`
 
 where "2225" is the port number the server is running on, and /testfile is the
 path to the file.
@@ -38,6 +38,6 @@ the server is running. For example, if your server is in the directory
 
 then the path for "testfile" would be
 
-`/home/raavi/server/testfile`
+`/home/raavi/server/test_directory/testfile`
 
 within the same directory.

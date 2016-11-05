@@ -12,14 +12,14 @@ To start the server, compile all the source files in /src/ using
 
 `javac *.java`
 
-and start the server by executing `serverLauncher` using
+and start the server by executing `ServerLauncher` using
 
-`java serverLauncher`
+`java ServerLauncher`
 
 By default, the server runs on port 2225, however, you may specify a port as an
-argument to serverLauncher:
+argument to ServerLauncher:
 
-`java serverLauncher <port number>`
+`java ServerLauncher <port number>`
 
 ### Downloading Files
 Once the server is running, you may use a browser to download files from your

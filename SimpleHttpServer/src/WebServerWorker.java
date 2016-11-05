@@ -116,12 +116,7 @@ public class WebServerWorker extends Thread {
 		try {
 			outputStream.write(response.getBytes("US-ASCII"));
 		} catch (Exception e) {
-<<<<<<< HEAD
-			System.out.println("Could not write response to socket:");
-			e.printStackTrace();
-=======
 			System.out.println("Error creating Bad Request:\n" + e.getMessage());
->>>>>>> http-server
 		}
 	}
 	

@@ -5,7 +5,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * Parses HTTP requests.
+ * Parses HTTP requests and stores the request headers.
+ * 
  * @author Raavi Mehta
  * @version 1.0
  */
@@ -15,6 +16,9 @@ public class HttpRequestParser {
 	Hashtable<String, String> requestHeaders = new Hashtable<>();
 	String requestLine = null;
 	
+	/**
+	 * Parses the request and stores the request headers.
+	 */
 	public void parse(String httpRequest) throws IOException, HttpRequestParserException {
 		BufferedReader br = new BufferedReader(new StringReader(httpRequest));
 		
@@ -46,6 +50,9 @@ public class HttpRequestParser {
 		return requestHeaders.get(header);
 	}
 	
+	/**
+	 * Returns the "path" portion of the URL.
+	 */
 	public String getUrlPath() throws HttpRequestParserException, IOException {
 		if (requestLine == null || requestLine.isEmpty())
 			throw new HttpRequestParserException("Url null or empty\n");
@@ -53,12 +60,16 @@ public class HttpRequestParser {
 		BufferedReader br = new BufferedReader(new StringReader(requestLine));
 		String[] line = br.readLine().split(" ");
 		
+		// only accept GET requests
 		if (!(line.length >= 3) || !line[0].equals("GET"))
 			throw new HttpRequestParserException("Improper request line format\n");
 		
 		return line[1];
 	}
 	
+	/**
+	 * Returns contents of Hashtable with request line.
+	 */
 	public String toString() {
 		String st = requestLine + System.lineSeparator();
 		for (Map.Entry<String, String> entry : requestHeaders.entrySet())

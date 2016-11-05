@@ -18,7 +18,7 @@ public class ServerLauncher implements Constants {
 		System.out.println(".....................................");
 
 		Scanner keyboard = new Scanner(System.in);
-		while ( !keyboard.next().equals("quit") );
+		while ( !keyboard.next().equalsIgnoreCase("quit"));
 
 		System.out.println();
 		server.shutdown();

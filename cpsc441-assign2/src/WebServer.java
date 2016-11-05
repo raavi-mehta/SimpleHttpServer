@@ -6,6 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A simple HTTP server that accepts clients and creates WebServerWorkers to
+ * deal with their GET requests.
+ * 
+ * @author Raavi Mehta
+ * @version 1.0
+ */
 public class WebServer extends Thread {
 	
 	private int port;
@@ -19,6 +26,7 @@ public class WebServer extends Thread {
 	
 	public void run() {
 		
+		// Create server instance
 		try {
 			serverSocket = new ServerSocket(port);
 			serverSocket.setSoTimeout(1000);
@@ -27,6 +35,7 @@ public class WebServer extends Thread {
 			System.exit(1);
 		}
 		
+		// Accept connections, and send workers to handle requests
 		System.out.println("\nWaiting for connection requests ...\n");
 		while(!shutdown) {
 			
@@ -36,7 +45,7 @@ public class WebServer extends Thread {
 				System.out.println("\nAccepted request for connection.");
 				executor.execute(new WebServerWorker(clientSocket));
 			} catch (SocketTimeoutException e) {
-				// TODO handle if needed
+				// Do nothing
 				
 			} catch (IOException e) {
 				System.out.println("I/O error while creating connection:\n" + e.getMessage());
